@@ -22,14 +22,23 @@ End If
 
 DestinationFolder = "C:\Users\" & WSHShell.ExpandEnvironmentStrings("%USERNAME%") & "\AppData\Local\Roblox\Versions\"
 
+If Not FSO.FolderExists(DestinationFolder) Then
+    WScript.Echo "Target folder does not exist."
+    WScript.Quit
+End If
+
 Set VersionsFolder = FSO.GetFolder(DestinationFolder)
 
 For Each SubFolder In VersionsFolder.SubFolders
     If Left(SubFolder.Name, 8) = "version-" Then
         Dim TargetFolder
         TargetFolder = SubFolder.Path & "\" & SourceFolderName
-        If Not FSO.FolderExists(TargetFolder) Then
+        If FSO.FolderExists(TargetFolder) Then
+            WScript.Echo "Source folder '" & SourceFolderName & "' already exists in target folder: " & FSO.GetFileName(SubFolder.Path)
+            WScript.Quit
+        Else
             FSO.CopyFolder SourceFolderPath, TargetFolder
+            WScript.Echo "Source folder '" & SourceFolderName & "' successfully copied to target folder: " & FSO.GetFileName(SubFolder.Path)
         End If
     End If
 Next
