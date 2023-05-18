@@ -1,4 +1,7 @@
 # framerate-access-tool
+
+WARNING: THIS IS FOR ROBLOX.
+
 Allows the user to access their computer's full framerate potential.
 
 To set up the tool, put the files in a folder and just run the py file and you are all set.
