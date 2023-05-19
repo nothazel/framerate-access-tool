@@ -1,6 +1,6 @@
 # framerate-access-tool
 
-WARNING: THIS IS FOR ROBLOX.
+WARNING: THIS IS FOR WINDOWS CLIENT ROBLOX. 
 
 Allows the user to access their computer's full framerate potential.
 
