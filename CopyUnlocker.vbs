@@ -20,18 +20,21 @@ If SourceFolderPath = "" Then
     WScript.Quit
 End If
 
-DestinationFolder = "C:\Users\" & WSHShell.ExpandEnvironmentStrings("%USERNAME%") & "\AppData\Local\Roblox\Versions\"
+DestinationFolderRoot = "C:\Users\" & WSHShell.ExpandEnvironmentStrings("%USERNAME%") & "\AppData\Local\Roblox\Versions\"
 
-If Not FSO.FolderExists(DestinationFolder) Then
+If Not FSO.FolderExists(DestinationFolderRoot) Then
     WScript.Echo "Target folder does not exist."
     WScript.Quit
 End If
 
-Set VersionsFolder = FSO.GetFolder(DestinationFolder)
+Set VersionsFolder = FSO.GetFolder(DestinationFolderRoot)
+
+FoundTargetFile = False
 
 For Each SubFolder In VersionsFolder.SubFolders
-    If Left(SubFolder.Name, 8) = "version-" Then
-        Dim TargetFolder
+    ' Check if "RobloxPlayerBeta" file exists in the subfolder
+    RobloxPlayerBetaFilePath = SubFolder.Path & "\RobloxPlayerBeta.exe"
+    If FSO.FileExists(RobloxPlayerBetaFilePath) Then
         TargetFolder = SubFolder.Path & "\" & SourceFolderName
         If FSO.FolderExists(TargetFolder) Then
             WScript.Echo "Source folder '" & SourceFolderName & "' already exists in target folder: " & FSO.GetFileName(SubFolder.Path)
@@ -39,6 +42,11 @@ For Each SubFolder In VersionsFolder.SubFolders
         Else
             FSO.CopyFolder SourceFolderPath, TargetFolder
             WScript.Echo "Source folder '" & SourceFolderName & "' successfully copied to target folder: " & FSO.GetFileName(SubFolder.Path)
+            FoundTargetFile = True
         End If
     End If
 Next
+
+If Not FoundTargetFile Then
+    WScript.Echo "No target folder with 'RobloxPlayerBeta' file found."
+End If
